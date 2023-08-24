@@ -65,10 +65,10 @@ const Slider = () => {
               {/* Mapping à travers chaque événement pour créer des boutons radio */}
               {byDateDesc.map((_, radioIdx) => (
                 <input
-                  key={`${event.id}`}
+                  key={`${byDateDesc[radioIdx].id}`}
                   type="radio"
                   name="radio-button"
-                  checked={idx === radioIdx}
+                  checked={index === radioIdx}
                 />
               ))}
             </div>
