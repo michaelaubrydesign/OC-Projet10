@@ -4,44 +4,37 @@ import { getMonth } from "../../helpers/Date";
 
 import "./style.scss";
 
-// Importation du composant fonctionnel Slider
 const Slider = () => {
 
-  // Utilisation du hook useData pour obtenir les data
   const { data } = useData();
 
-  // État local pour stocker l'index de la carte actuellement affichée dans le slider
   const [index, setIndex] = useState(0);
 
-  // Trie des événements par ordre !!! décroissant !!! de date
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
   );
 
-  // Fonction pour passer à la prochaine carte après un délai (5000ms = 5sec)
   const nextCard = () => {
+    if (byDateDesc) {
     setTimeout(
-      () => setIndex(index < byDateDesc.length ? index + 1 : 0),
+      () => setIndex(index < byDateDesc.length - 1 ? index + 1 : 0),
       5000
-    );
+    )};
   };
 
-  // Utilisation de useEffect pour appeler la fonction nextCard après chaque rendu
   useEffect(() => {
     nextCard();
   });
 
-  // Rendu du composant
   return (
     <div className="SlideCardList">
       
       {/* Mapping à travers chaque événement dans byDateDesc */}
       {byDateDesc?.map((event, idx) => (
-        <>
+        <div key={event.id}>
 
         {/* Carte de l'événement */}
           <div
-            key={event.title}
             className={`SlideCard SlideCard--${
               index === idx ? "display" : "hide"
             }`}
@@ -69,11 +62,12 @@ const Slider = () => {
                   type="radio"
                   name="radio-button"
                   checked={index === radioIdx}
+                  readOnly
                 />
               ))}
             </div>
           </div>
-        </>
+        </div>
       ))}
     </div>
   );
