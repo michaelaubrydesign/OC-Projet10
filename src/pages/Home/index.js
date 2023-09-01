@@ -13,7 +13,32 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const {last} = useData()
+  // Récupère la propriété 'data' à partir du résultat de 'useData()'
+  const {data} = useData()
+  // Définit une fonction 'displayLastEvent'
+  const displayLastEvent = () => {
+    // Vérifie si 'data' existe
+    if (data) {
+      // Trie les événements par date, en ordre décroissant
+      const eventsSorted = data.events.sort((evtA, evtB) =>
+        new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
+      );
+      // Sélectionne le dernier événement trié
+      const last = eventsSorted[0] 
+      // Renvoie un composant 'EventCard' avec les détails du dernier événement
+      return (
+        <EventCard
+            imageSrc={last?.cover}
+            title={last?.title}
+            date={new Date(last?.date)}
+            small
+            label="boom"
+        />
+      )
+    } 
+    // Renvoie 'null' si 'data' est falsy (null ou undefined)
+    return null;   
+  };
   return <>
     <header>
       <Menu />
@@ -116,13 +141,7 @@ const Page = () => {
     <footer className="row">
       <div className="col presta">
         <h3>Notre derniére prestation</h3>
-        <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
-          small
-          label="boom"
-        />
+        {displayLastEvent()}
       </div>
       <div className="col contact">
         <h3>Contactez-nous</h3>

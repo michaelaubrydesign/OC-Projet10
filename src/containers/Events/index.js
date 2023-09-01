@@ -15,28 +15,30 @@ const EventList = () => {
   const [currentPage, setCurrentPage] = useState(1); // État pour la page actuelle
   // Filtrage des événements en fonction du type et de la pagination
   const filteredEvents = (
+    // Sélectionne les événements en fonction du type s'il est spécifié, sinon utilise tous les événements
     (!type
       ? data?.events
       : data?.events) || []
+      // Filtre les événements en fonction du type (si spécifié)
   ).filter((event) => {
     if (!type) {
-      return true
+      return true // Inclut tous les événements si type est absent
     }
     if (
       event.type === type
     ) {
-      return true;
+      return true; // Inclut l'événement si son type correspond à celui spécifié
     }
-    return false;
+    return false; // Exclut l'événement s'il ne correspond pas au type
   })
   .filter((event, index) => {
     if (
       (currentPage - 1) * PER_PAGE <= index &&
       PER_PAGE * currentPage > index
     ) {
-      return true;
+      return true; // Inclut l'événement si son index est dans la plage de pagination
     }
-    return false;
+    return false; // Exclut l'événement s'il n'est pas dans la plage de pagination
   });
 
   // Fonction pour changer le type d'événement sélectionné et réinitialiser la page
@@ -57,16 +59,13 @@ const EventList = () => {
         "loading"
       ) : (
         <>
-        {/* Sélection du type d'événement */}
           <h3 className="SelectTitle">Catégories</h3>
           <Select
             selection={Array.from(typeList)}
             onChange={(value) => (value ? changeType(value) : changeType(null))}
           />
-          {/* Affichage des événements filtrés */}
           <div id="events" className="ListContainer">
             {filteredEvents.map((event) => (
-              // Affichage d'un événement dans un modal
               <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {({ setIsOpened }) => (
                   <EventCard
@@ -80,10 +79,8 @@ const EventList = () => {
               </Modal>
             ))}
           </div>
-          {/* Affichage de la pagination */}
           <div className="Pagination">
             {[...Array(pageNumber || 0)].map((_, n) => (
-              // Lien vers une page spécifique
               // eslint-disable-next-line react/no-array-index-key
               <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}>
                 {n + 1}
